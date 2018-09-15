@@ -16,6 +16,7 @@ function HexCoord(q, r, s) {
        this.q = q;
        this.r = r;
        this.s = s;
+       //TODO: Equals, hash code
        return this;
     }
 }
@@ -41,8 +42,8 @@ function hex_rotate_right(a) {
     return HexCoord(-a.r, -a.s, -a.q);
 }
 
-//Initial definition now that HexCoord has been defined
-/* Since we're using FLAT-TOPPED hexes, directions are:
+/* Initial definition now that HexCoord has been defined
+ * Since we're using FLAT-TOPPED hexes, directions are:
  * 0 = NE;  1 = SE;  2 = S
  * 3 = SW;  4 = NW;  5 = N
  */
@@ -86,4 +87,13 @@ function hex_round(h) {
         si = -qi - ri;
     }
     return HexCoord(qi, ri, si);
+}
+
+//Shift a HexCoord x distance in y direction
+function hex_shift(h, dir, dist) {
+    //Make a copy of the direction so we don't mess it up
+    var dir_ref = hex_direction(dir);
+    var direction = HexCoord(dir_ref.q, dir_ref.r, dir_ref.s);
+
+    return hex_add(h, hex_scale(direction, dist));
 }

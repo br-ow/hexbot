@@ -11,9 +11,9 @@ const Hex = require('./HexCoord.js');
 //constants
 const EVEN = 1; //What TextMapper currently uses!
 const ODD = -1;
-const OFFSET = EVEN; //since it's not going to change and would break otherwise
+const OFFSET = EVEN; //since it's not going to change and could get messy otherwise
 
- function OffsetCoord(col, row) {
+function OffsetCoord(col, row) {
     this.col = col;
     this.row = row;
     return this;
