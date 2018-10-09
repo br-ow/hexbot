@@ -4,6 +4,7 @@
  * Making heavy use of:
  * https://www.redblobgames.com/grids/hexagons/implementation.html
  */
+"use strict";
 
 //include
 const Hex = require('./HexCoord.js');
@@ -13,31 +14,40 @@ const EVEN = 1; //What TextMapper currently uses!
 const ODD = -1;
 const OFFSET = EVEN; //since it's not going to change and could get messy otherwise
 
-function OffsetCoord(col, row) {
+class OffsetCoord {
+    constructor (col, row) {
     this.col = col;
     this.row = row;
-    return this;
- }
+    }
+
+    equals(other_coord) {
+        return ((other_coord.col === this.col ) && 
+        (other_coord.row === this.row));
+    }
+
+    offset_to_cube(offset, h) {
+        var q = h.col;
+        var r = h.row - (h.col + offset * (h.col & 1)) / 2;//bitwise &; returns 1 if ODD, else 0 if EVEN
+        var s = -q - r;
+        return new Hex.HexCoord(q, r, s);
+    }
+
+    //Wrapper function because offset is likely to be predeterimined
+    to_cube() {
+        return this.offset_to_cube(OFFSET, this);
+    }
+}//end class
+
+exports.OffsetCoord = OffsetCoord;
 
 
-function qoffset_from_cube(offset, h) {
+function offset_from_cube(offset, h) {
     var col = h.q;
     var row = h.r + (h.q + offset * (h.q & 1)) / 2;
-    return OffsetCoord(col, row);
+    return new OffsetCoord(col, row);
 }
 
 //Wrapper function because offset is likely to be predeterimined
-function offs_from_cube(h) {
-    return qoffset_from_cube(OFFSET, h);
-}
-
-function qoffset_to_cube(offset, h) {
-    var q = h.col;
-    var r = h.row - (h.col + offset * (h.col & 1)) / 2;
-    var s = -q - r;
-    return HexCoord(q, r, s);
-}
-
-function offs_to_cube(h) {
-    return qoffset_to_cube(OFFSET, h);
+exports.from_cube = function (h) {
+    return offset_from_cube(OFFSET, h);
 }

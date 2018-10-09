@@ -4,6 +4,7 @@
 
 var assert = require('assert');
 var hex_coord = require ('../src/HexCoord.js');
+var offs_coord = require('../src/OffsetCoord.js');
 
 
 describe('Array', function() {
@@ -119,7 +120,6 @@ describe('HexCoord', function() {
 
     describe('#neighbor', function() {
         it('get a neighbor', function() {
-            debugger;
             var starting_spot = new hex_coord.HexCoord(1, -2, 1);
             assert.equal(starting_spot.neighbor(1).equals(new hex_coord.HexCoord(2, -3, 1)), true);
         });
@@ -155,4 +155,96 @@ describe('HexCoord', function() {
         });
     });
 
+    describe('#round', function() {
+        it('round fractional HexCoord to the nearest hex', function() {
+            var starting_spot = new hex_coord.HexCoord(1.6, -3, 1.4);
+            var rounds_to = new hex_coord.HexCoord(2, -3, 1);
+            assert.equal(starting_spot.round().equals(rounds_to), true);
+        });
+    });
+
+    describe('#round 2', function() {
+        it('round fractional HexCoord to the nearest hex', function() {
+            var starting_spot = new hex_coord.HexCoord(1.6, 1.4, -3);
+            var rounds_to = new hex_coord.HexCoord(2, 1, -3);
+            assert.equal(starting_spot.round().equals(rounds_to), true);
+        });
+    });
+
+    describe('#shift', function() {
+        it('move a hex y spaces in x direction', function() {
+            var starting_spot = new hex_coord.HexCoord(-2, -1, 3);
+            var ending_spot = new hex_coord.HexCoord(2, -1, -1);
+            assert.equal(starting_spot.shift(0, 4).equals(ending_spot), true);
+        });
+    });
+
+    describe('#shift 2', function() {
+        it('move a hex y spaces in x direction', function() {
+            var starting_spot = new hex_coord.HexCoord(1, -3, 2);
+            var ending_spot = new hex_coord.HexCoord(-1, -1, 2);
+            assert.equal(starting_spot.shift(4, 2).equals(ending_spot), true);
+        });
+    });
+
 });//end HexCoord
+
+describe('OffsetCoord', function() {
+
+    describe('#this.col', function() {
+        it('should retrieve col value of coordinate', function() {
+            assert.equal((new offs_coord.OffsetCoord(1, 2)).col, 1);
+        });
+    });
+
+    describe('#this.col 2', function() {
+        it('should retrieve col value of coordinate', function() {
+            assert.equal(new offs_coord.OffsetCoord(-3, 2).col, -3);
+        });
+    });
+
+    describe('#this.row', function() {
+        it('should retrieve row value of coordinate', function() {
+            assert.equal(new offs_coord.OffsetCoord(1, 2).row, 2);
+        });
+    });
+
+    describe('#this.row 2', function() {
+        it('should retrieve row value of coordinate', function() {
+            assert.equal(new offs_coord.OffsetCoord(1, -3).row, -3);
+        });
+    });
+
+    describe('#to_cube', function() {
+        it('Convert offset coordinate to cube coordinate', function() {
+            var starting_spot = new offs_coord.OffsetCoord(1, 2);
+            var converted = new hex_coord.HexCoord(1, 1, -2);
+            assert.equal(starting_spot.to_cube().equals(converted), true);
+        });
+    });
+
+    describe('#to_cube 2', function() {
+        it('Convert offset coordinate to cube coordinate', function() {
+            var starting_spot = new offs_coord.OffsetCoord(2, 1);
+            var converted = new hex_coord.HexCoord(2, 0, -2);
+            assert.equal(starting_spot.to_cube().equals(converted), true);
+        });
+    });
+
+    describe('#from_cube', function() {
+        it('Convert cube coordinate to offset coordinate', function() {
+            var starting_spot = new hex_coord.HexCoord(2, 0, -2);
+            var converted = new offs_coord.OffsetCoord(2, 1);
+            assert.equal(offs_coord.from_cube(starting_spot).equals(converted), true);
+        });
+    });
+
+    describe('#from_cube 2', function() {
+        it('Convert cube coordinate to offset coordinate', function() {
+            var starting_spot = new hex_coord.HexCoord(1, 1, -2);
+            var converted = new offs_coord.OffsetCoord(1, 2);
+            assert.equal(offs_coord.from_cube(starting_spot).equals(converted), true);
+        });
+    });
+
+});// end OffsetCoord
