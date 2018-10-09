@@ -187,6 +187,91 @@ describe('HexCoord', function() {
         });
     });
 
+    describe('#shift 2', function() {
+        it('move a hex y spaces in x direction', function() {
+            var starting_spot = new hex_coord.HexCoord(1, -3, 2);
+            var ending_spot = new hex_coord.HexCoord(-1, -1, 2);
+            assert.equal(starting_spot.shift(4, 2).equals(ending_spot), true);
+        });
+    });
+
+    describe('#shift 2', function() {
+        it('move a hex y spaces in x direction', function() {
+            var starting_spot = new hex_coord.HexCoord(1, -3, 2);
+            var ending_spot = new hex_coord.HexCoord(-1, -1, 2);
+            assert.equal(starting_spot.shift(4, 2).equals(ending_spot), true);
+        });
+    });
+
+    describe('#ring (length)', function() {
+        it('get an array of HexCoords a specific distance from the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
+            var ring = starting_spot.ring(1);
+            assert.equal(ring.length, 6);
+        });
+    });
+
+    describe('#ring 2', function() {
+        it('get an array of HexCoords a specific distance from the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
+            var ring = starting_spot.ring(1);
+            var spot_one = new hex_coord.HexCoord(-1, 1, 0);
+            assert.equal(ring[1].equals(spot_one), true);
+        });
+    });
+
+    describe('#ring 3', function() {
+        it('get an array of HexCoords a specific distance from the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
+            var ring = starting_spot.ring(1);
+            var spot_three = new hex_coord.HexCoord(0, -1, 1);
+            assert.equal(ring[3].equals(spot_three), true);
+        });
+    });
+
+    describe('#ring 4 (length)', function() {
+        it('get an array of HexCoords a specific distance from the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(1, -1, 0);
+            var ring = starting_spot.ring(2);
+            assert.equal(ring.length, 12);
+        });
+    });
+
+    describe('#ring 5', function() {
+        it('get an array of HexCoords a specific distance from the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(1, -1, 0);
+            var ring = starting_spot.ring(2);
+            var spot_three = new hex_coord.HexCoord(2, 0, -2);
+            assert.equal(ring[3].equals(spot_three), true);
+        });
+    });
+
+    describe('#spiral (length)', function() {
+        it('get an array of HexCoords surrounding the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
+            var spiral = starting_spot.spiral(2);
+            assert.equal(spiral.length, 19);
+        });
+    });
+
+    describe('#spiral 2', function() {
+        it('get an array of HexCoords surrounding the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
+            var spiral = starting_spot.spiral(2);
+            var spot_one = new hex_coord.HexCoord(-2, 1, 1);
+            assert.equal(spiral[1].equals(spot_one), true);
+        });
+    });
+
+    describe('#spiral 3', function() {
+        it('get an array of HexCoords surrounding the given spot', function() {
+            var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
+            var spiral = starting_spot.spiral(2);
+            var spot_eighteen = new hex_coord.HexCoord(-3, 1, 2);
+            assert.equal(spiral[18].equals(spot_eighteen), true);
+        });
+    });
+
 });//end HexCoord
 
 describe('OffsetCoord', function() {

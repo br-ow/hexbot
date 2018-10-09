@@ -109,6 +109,40 @@ class HexCoord {
         return this.add(direction.scale(dist));
     }
 
+    //Get all coordinates in a ring at distance r from here
+    ring(radius) {
+        if (radius == 0) {
+            return this;
+        }
+        var results = [];
+        // this code doesn't work for radius == 0; can you see why?
+        var cube = this.shift(4, radius);
+
+        var i;
+        var j;
+        for (i = 0; i < 6; i++) {
+            for(j = 0; j < radius; j++) {
+                results.push(cube);
+                cube = cube.neighbor(i);
+            }
+        }
+        return results;
+    }
+
+    spiral(radius) {
+        var results = [this];
+        var k;
+        var m;
+        var ring;
+        for (k = 1; k <= radius; k++) {
+            ring = this.ring(k);
+            for (m = 0; m < ring.length; m++) {
+                results.push(ring[m]);
+            }
+        }
+        return results;
+    }
+
 }//end class
 
 
