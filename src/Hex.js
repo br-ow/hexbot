@@ -4,6 +4,7 @@
 "use strict";
 
 const coord = require('./HexCoord.js');
+var __ = require('private-parts').createKey(); //Makes attributes private
 
 /* Planned properties:
  * Coordinate: This one's easy. Just the hex's position on the map.
@@ -16,9 +17,25 @@ const coord = require('./HexCoord.js');
 
 class Hex {
     constructor (coordinate, biome) {
-        this.coord = coordinate;
-        this.biome = biome;
+        __(this).coord = coordinate;
+        __(this).biome = biome;
         //add more here as we have more to add.
+    }
+
+    getCoord() {
+        return __(this).coord;
+    }
+
+    setCoord(new_coord) {
+        __(this).coord = new_coord;
+    }
+
+    getBiome() {
+        return __(this).biome;
+    }
+
+    setBiome(new_biome) {
+        __(this).biome = new_biome;
     }
 
 }//end class

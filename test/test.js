@@ -18,39 +18,39 @@ describe('Array', function() {
 });
 
 describe('HexCoord', function() {
-    describe('#this.q', function() {
+    describe('#getQ', function() {
         it('should retrieve q value of coordinate', function() {
-            assert.equal((new hex_coord.HexCoord(1, 2, -3)).q, 1);
+            assert.equal((new hex_coord.HexCoord(1, 2, -3)).getQ(), 1);
         });
     });
 
-    describe('#this.q 2', function() {
+    describe('#getQ 2', function() {
         it('should retrieve q value of coordinate', function() {
-            assert.equal(new hex_coord.HexCoord(-3, 2, 1).q, -3);
+            assert.equal(new hex_coord.HexCoord(-3, 2, 1).getQ(), -3);
         });
     });
 
-    describe('#this.r', function() {
+    describe('#getR', function() {
         it('should retrieve r value of coordinate', function() {
-            assert.equal(new hex_coord.HexCoord(1, 2, -3).r, 2);
+            assert.equal(new hex_coord.HexCoord(1, 2, -3).getR(), 2);
         });
     });
 
-    describe('#this.r 2', function() {
+    describe('#getR 2', function() {
         it('should retrieve r value of coordinate', function() {
-            assert.equal(new hex_coord.HexCoord(1, -3, 2).r, -3);
+            assert.equal(new hex_coord.HexCoord(1, -3, 2).getR(), -3);
         });
     });
 
-    describe('#this.s', function() {
+    describe('#getS', function() {
         it('should retrieve s value of coordinate', function() {
-            assert.equal(new hex_coord.HexCoord(1, 2, -3).s, -3);
+            assert.equal(new hex_coord.HexCoord(1, 2, -3).getS(), -3);
         });
     });
 
-    describe('#this.s 2', function() {
+    describe('#getS 2', function() {
         it('should retrieve s value of coordinate', function() {
-            assert.equal(new hex_coord.HexCoord(-3, 2, 1).s, 1);
+            assert.equal(new hex_coord.HexCoord(-3, 2, 1).getS(), 1);
         });
     });
 
@@ -278,27 +278,27 @@ describe('HexCoord', function() {
 
 describe('OffsetCoord', function() {
 
-    describe('#this.col', function() {
+    describe('#getCol', function() {
         it('should retrieve col value of coordinate', function() {
-            assert.equal((new offs_coord.OffsetCoord(1, 2)).col, 1);
+            assert.equal((new offs_coord.OffsetCoord(1, 2)).getCol(), 1);
         });
     });
 
-    describe('#this.col 2', function() {
+    describe('#getCol 2', function() {
         it('should retrieve col value of coordinate', function() {
-            assert.equal(new offs_coord.OffsetCoord(-3, 2).col, -3);
+            assert.equal(new offs_coord.OffsetCoord(-3, 2).getCol(), -3);
         });
     });
 
-    describe('#this.row', function() {
+    describe('#getRow', function() {
         it('should retrieve row value of coordinate', function() {
-            assert.equal(new offs_coord.OffsetCoord(1, 2).row, 2);
+            assert.equal(new offs_coord.OffsetCoord(1, 2).getRow(), 2);
         });
     });
 
-    describe('#this.row 2', function() {
+    describe('#getRow 2', function() {
         it('should retrieve row value of coordinate', function() {
-            assert.equal(new offs_coord.OffsetCoord(1, -3).row, -3);
+            assert.equal(new offs_coord.OffsetCoord(1, -3).getRow(), -3);
         });
     });
 
@@ -341,7 +341,7 @@ describe('Hex', function() {
         it('Able to access a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(1, 2, -3);
             var the_hex = new hex.Hex(spot, "Plains");
-            assert.equal(the_hex.coord.equals(spot), true);
+            assert.equal(the_hex.getCoord().equals(spot), true);
         });
     });
 
@@ -349,7 +349,7 @@ describe('Hex', function() {
         it('Able to access a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(3, 2, -5);
             var the_hex = new hex.Hex(spot, "Plains");
-            assert.equal(the_hex.coord.equals(spot), true);
+            assert.equal(the_hex.getCoord().equals(spot), true);
         });
     });
 
@@ -357,14 +357,14 @@ describe('Hex', function() {
         it('Able to access a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Plains");
-            assert.equal(the_hex.biome, "Plains");
+            assert.equal(the_hex.getBiome(), "Plains");
         });
     });
     describe('this.biome 2', function() {
         it('Able to access a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Forest");
-            assert.equal(the_hex.biome, "Forest");
+            assert.equal(the_hex.getBiome(), "Forest");
         });
     });
 });//end Hex

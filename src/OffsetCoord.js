@@ -8,6 +8,7 @@
 
 //include
 const Hex = require('./HexCoord.js');
+var __ = require('private-parts').createKey(); //Makes attributes private
 
 //constants
 const EVEN = 1; //What TextMapper currently uses!
@@ -16,18 +17,26 @@ const OFFSET = EVEN; //since it's not going to change and could get messy otherw
 
 class OffsetCoord {
     constructor (col, row) {
-    this.col = col;
-    this.row = row;
+    __(this).col = col;
+    __(this).row = row;
     }
 
     equals(other_coord) {
-        return ((other_coord.col === this.col ) && 
-        (other_coord.row === this.row));
+        return ((__(other_coord).col === __(this).col ) && 
+        (__(other_coord).row === __(this).row));
+    }
+
+    getCol() {
+        return __(this).col;
+    }
+
+    getRow() {
+        return __(this).row;
     }
 
     offsetToCube(offset, h) {
-        var q = h.col;
-        var r = h.row - (h.col + offset * (h.col & 1)) / 2;//bitwise &; returns 1 if ODD, else 0 if EVEN
+        var q = __(h).col;
+        var r = __(h).row - (__(h).col + offset * (__(h).col & 1)) / 2;//bitwise &; returns 1 if ODD, else 0 if EVEN
         var s = -q - r;
         return new Hex.HexCoord(q, r, s);
     }
@@ -42,8 +51,8 @@ exports.OffsetCoord = OffsetCoord;
 
 
 function offsetFromCube(offset, h) {
-    var col = h.q;
-    var row = h.r + (h.q + offset * (h.q & 1)) / 2;
+    var col = h.getQ();
+    var row = h.getR() + (h.getQ() + offset * (h.getQ() & 1)) / 2;
     return new OffsetCoord(col, row);
 }
 
