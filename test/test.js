@@ -1,10 +1,12 @@
-//Tests for the HexBott
-//Author: Brifactor
-//Help from https://mochajs.org/
+/*Tests for the HexBott
+ *Author: Brifactor
+ *Help from https://mochajs.org/
+ */
 
 var assert = require('assert');
 var hex_coord = require ('../src/HexCoord.js');
 var offs_coord = require('../src/OffsetCoord.js');
+var hex = require('../src/Hex.js');
 
 
 describe('Array', function() {
@@ -98,17 +100,17 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#rotate_left', function() {
+    describe('#rotateLeft', function() {
         it('rotate HexCoord to the left', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
-            assert.equal(starting_spot.rotate_left().equals(new hex_coord.HexCoord(3, -1, -2)), true);
+            assert.equal(starting_spot.rotateLeft().equals(new hex_coord.HexCoord(3, -1, -2)), true);
         });
     });
 
-    describe('#rotate_right', function() {
+    describe('#rotateRight', function() {
         it('rotate HexCoord to the right', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
-            assert.equal(starting_spot.rotate_right().equals(new hex_coord.HexCoord(-2, 3, -1)), true);
+            assert.equal(starting_spot.rotateRight().equals(new hex_coord.HexCoord(-2, 3, -1)), true);
         });
     });
 
@@ -300,36 +302,69 @@ describe('OffsetCoord', function() {
         });
     });
 
-    describe('#to_cube', function() {
+    describe('#toCube', function() {
         it('Convert offset coordinate to cube coordinate', function() {
             var starting_spot = new offs_coord.OffsetCoord(1, 2);
             var converted = new hex_coord.HexCoord(1, 1, -2);
-            assert.equal(starting_spot.to_cube().equals(converted), true);
+            assert.equal(starting_spot.toCube().equals(converted), true);
         });
     });
 
-    describe('#to_cube 2', function() {
+    describe('#toCube 2', function() {
         it('Convert offset coordinate to cube coordinate', function() {
             var starting_spot = new offs_coord.OffsetCoord(2, 1);
             var converted = new hex_coord.HexCoord(2, 0, -2);
-            assert.equal(starting_spot.to_cube().equals(converted), true);
+            assert.equal(starting_spot.toCube().equals(converted), true);
         });
     });
 
-    describe('#from_cube', function() {
+    describe('#fromCube', function() {
         it('Convert cube coordinate to offset coordinate', function() {
             var starting_spot = new hex_coord.HexCoord(2, 0, -2);
             var converted = new offs_coord.OffsetCoord(2, 1);
-            assert.equal(offs_coord.from_cube(starting_spot).equals(converted), true);
+            assert.equal(offs_coord.fromCube(starting_spot).equals(converted), true);
         });
     });
 
-    describe('#from_cube 2', function() {
+    describe('#fromCube 2', function() {
         it('Convert cube coordinate to offset coordinate', function() {
             var starting_spot = new hex_coord.HexCoord(1, 1, -2);
             var converted = new offs_coord.OffsetCoord(1, 2);
-            assert.equal(offs_coord.from_cube(starting_spot).equals(converted), true);
+            assert.equal(offs_coord.fromCube(starting_spot).equals(converted), true);
         });
     });
 
 });// end OffsetCoord
+
+describe('Hex', function() {
+    describe('this.coord', function() {
+        it('Able to access a hexs coordinate', function() {
+            var spot = new hex_coord.HexCoord(1, 2, -3);
+            var the_hex = new hex.Hex(spot, "Plains");
+            assert.equal(the_hex.coord.equals(spot), true);
+        });
+    });
+
+    describe('this.coord 2', function() {
+        it('Able to access a hexs coordinate', function() {
+            var spot = new hex_coord.HexCoord(3, 2, -5);
+            var the_hex = new hex.Hex(spot, "Plains");
+            assert.equal(the_hex.coord.equals(spot), true);
+        });
+    });
+
+    describe('this.biome', function() {
+        it('Able to access a hexs biome', function() {
+            var spot = new hex_coord.HexCoord(-3, 2, 1);
+            var the_hex = new hex.Hex(spot, "Plains");
+            assert.equal(the_hex.biome, "Plains");
+        });
+    });
+    describe('this.biome 2', function() {
+        it('Able to access a hexs biome', function() {
+            var spot = new hex_coord.HexCoord(-3, 2, 1);
+            var the_hex = new hex.Hex(spot, "Forest");
+            assert.equal(the_hex.biome, "Forest");
+        });
+    });
+});//end Hex

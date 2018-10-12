@@ -20,6 +20,7 @@ class HexCoord {
             throw "q + r + s must be 0";
         }
     }
+    //For comparisons
     equals(other_coord) {
             return ((other_coord.q === this.q ) && 
             (other_coord.r === this.r) && 
@@ -43,11 +44,11 @@ class HexCoord {
         return new HexCoord(this.q * k, this.r * k, this.s * k);
     }
 
-    rotate_left() {
+    rotateLeft() {
         return new HexCoord(-this.s, -this.q, -this.r);
     }
 
-    rotate_right() {
+    rotateRight() {
         return new HexCoord(-this.r, -this.s, -this.q);
     }
 
@@ -102,9 +103,7 @@ class HexCoord {
 
     //Shift a HexCoord x distance in y direction
     shift(dir, dist) {
-        //Make a copy of the direction so we don't mess it up
-        var dir_ref = this.direction(dir);
-        var direction = new HexCoord(dir_ref.q, dir_ref.r, dir_ref.s);
+        var direction = this.direction(dir);
 
         return this.add(direction.scale(dist));
     }

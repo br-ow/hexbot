@@ -25,7 +25,7 @@ class OffsetCoord {
         (other_coord.row === this.row));
     }
 
-    offset_to_cube(offset, h) {
+    offsetToCube(offset, h) {
         var q = h.col;
         var r = h.row - (h.col + offset * (h.col & 1)) / 2;//bitwise &; returns 1 if ODD, else 0 if EVEN
         var s = -q - r;
@@ -33,21 +33,21 @@ class OffsetCoord {
     }
 
     //Wrapper function because offset is likely to be predeterimined
-    to_cube() {
-        return this.offset_to_cube(OFFSET, this);
+    toCube() {
+        return this.offsetToCube(OFFSET, this);
     }
 }//end class
 
 exports.OffsetCoord = OffsetCoord;
 
 
-function offset_from_cube(offset, h) {
+function offsetFromCube(offset, h) {
     var col = h.q;
     var row = h.r + (h.q + offset * (h.q & 1)) / 2;
     return new OffsetCoord(col, row);
 }
 
 //Wrapper function because offset is likely to be predeterimined
-exports.from_cube = function (h) {
-    return offset_from_cube(OFFSET, h);
+exports.fromCube = function (h) {
+    return offsetFromCube(OFFSET, h);
 }
