@@ -5,6 +5,7 @@
  */
 "use strict";
 
+//Includes
 const math = require('mathjs');
 var __ = require('private-parts').createKey(); //Makes attributes private
 
@@ -26,6 +27,11 @@ class HexCoord {
             return ((other_coord.getQ() === __(this).q ) && 
             (other_coord.getR() === __(this).r) && 
             (other_coord.getS() === __(this).s));
+    }
+
+    //For hash codes
+    toString() {
+        return "(" + __(this).q.toString() + ", " + __(this).r.toString() + ", " + __(this).s.toString() + ")";
     }
 
     getQ() {

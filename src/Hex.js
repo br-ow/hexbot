@@ -3,6 +3,7 @@
  */
 "use strict";
 
+//Includes
 const coord = require('./HexCoord.js');
 var __ = require('private-parts').createKey(); //Makes attributes private
 

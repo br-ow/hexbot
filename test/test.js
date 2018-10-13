@@ -4,9 +4,11 @@
  */
 
 var assert = require('assert');
-var hex_coord = require ('../src/HexCoord.js');
-var offs_coord = require('../src/OffsetCoord.js');
-var hex = require('../src/Hex.js');
+const hex_coord = require ('../src/HexCoord.js');
+const offs_coord = require('../src/OffsetCoord.js');
+const world_mod = require('../src/World.js');
+var world = world_mod.instance;
+const hex = require('../src/Hex.js');
 
 
 describe('Array', function() {
@@ -337,7 +339,7 @@ describe('OffsetCoord', function() {
 });// end OffsetCoord
 
 describe('Hex', function() {
-    describe('this.coord', function() {
+    describe('getCoord', function() {
         it('Able to access a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(1, 2, -3);
             var the_hex = new hex.Hex(spot, "Plains");
@@ -345,7 +347,7 @@ describe('Hex', function() {
         });
     });
 
-    describe('this.coord 2', function() {
+    describe('getCoord 2', function() {
         it('Able to access a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(3, 2, -5);
             var the_hex = new hex.Hex(spot, "Plains");
@@ -353,14 +355,14 @@ describe('Hex', function() {
         });
     });
 
-    describe('this.biome', function() {
+    describe('getBiome', function() {
         it('Able to access a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Plains");
             assert.equal(the_hex.getBiome(), "Plains");
         });
     });
-    describe('this.biome 2', function() {
+    describe('getBiome 2', function() {
         it('Able to access a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Forest");
@@ -368,3 +370,25 @@ describe('Hex', function() {
         });
     });
 });//end Hex
+
+describe('World', function() {
+    describe('#getHex()', function() {
+        it('Place and retrieve a hex on the map', function() {
+            var spot = new hex_coord.HexCoord(0, 1, -1);
+            var the_hex = new hex.Hex(spot, "Plains");
+            var same_spot = new hex_coord.HexCoord(0, 1, -1);
+            world.setHex(the_hex.getCoord(), the_hex);
+            assert.equal(world.getHex(same_spot).getBiome(), "Plains");
+        });
+    });
+
+    describe('#getHex() 2', function() {
+        it('Place and retrieve a hex on the map', function() {
+            var spot = new hex_coord.HexCoord(2, -1, -1);
+            var the_hex = new hex.Hex(spot, "Forest");
+            var same_spot = new hex_coord.HexCoord(2, -1, -1);
+            world.setHex(the_hex.getCoord(), the_hex);
+            assert.equal(world.getHex(same_spot).getBiome(), "Forest");
+        });
+    });
+});
