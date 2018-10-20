@@ -2,7 +2,7 @@
  * A ping pong bot, whenever you send "ping", it replies "pong".
  */
 
-//Imports
+//Includes
 const Discord = require('discord.js'); // discord.js module
 const config = require('../config.json'); //Config file
 

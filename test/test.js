@@ -9,6 +9,8 @@ const offs_coord = require('../src/OffsetCoord.js');
 const world_mod = require('../src/World.js');
 var world = world_mod.instance;
 const hex = require('../src/Hex.js');
+const sess = require('../src/Session.js');
+var save = require('../save.json'); //Save file
 
 
 describe('Array', function() {
@@ -391,4 +393,121 @@ describe('World', function() {
             assert.equal(world.getHex(same_spot).getBiome(), "Forest");
         });
     });
-});
+
+    describe('#getHex() 3', function() {
+        it('Retrieve auto-generated hex on map.', function() {
+            var spot = new hex_coord.HexCoord(0, 0, 0);
+            var same_spot = new hex_coord.HexCoord(0, 0, 0);
+            assert.equal(world.getHex(spot).getCoord().equals(same_spot), true);
+        });
+    });
+});//end World
+
+describe('Session', function() {
+    describe('hasUser()', function() {
+        it('Should recognize the user we put there.', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.hasUser(123), true);
+        });
+    });
+
+    describe('hasUser() 2', function() {
+        it('Should not recognize the user we did not put there.', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.hasUser(456), false);
+        });
+    });
+
+    describe('addUser()', function() {
+        it('Add additional users to the session', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.numUsers(), 1);
+            session.addUser(456)
+            assert.equal(session.numUsers(), 2);
+            assert.equal(session.hasUser(456), true);
+        });
+    });
+
+    describe('removeUser()', function() {
+        it('Remove a user from the session', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.numUsers(), 1);
+            session.addUser(456)
+            assert.equal(session.numUsers(), 2);
+            assert.equal(session.hasUser(123), true);
+            session.removeUser(123);
+            assert.equal(session.hasUser(123), false);
+        });
+    });
+
+    describe('getSeason()', function() {
+        it('Can retrieve season', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getSeason(), save.season);
+        });
+    });
+
+    describe('setSeason()', function() {
+        it('Can set and retrieve season', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getSeason(), save.season);
+            session.setSeason("Summer");
+            assert.equal(session.getSeason(), "Summer");
+        });
+    });
+
+    describe('setPos() / getPos()', function() {
+        it('Can set and retrieve position', function() {
+            var session = new sess.Session(123);
+            var start_pos = new hex_coord.HexCoord(save.basex, save.basey, save.basez);
+            assert.equal(session.getPos().equals(start_pos), true);
+
+            var spot = new hex_coord.HexCoord(2, -1, -1);
+            var same_spot = new hex_coord.HexCoord(2, -1, -1);
+            session.setPos(spot);
+            assert.equal(session.getPos().equals(spot), true);
+        });
+    });
+
+    describe('setFacing() / getFacing()', function() {
+        it('Can set and retrieve facing', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getFacing(), 0);
+
+            session.setFacing(3);
+            assert.equal(session.getFacing(), 3);
+        });
+    });
+
+    describe('setHour() / getHour()', function() {
+        it('Can set and retrieve hour', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getHour(), 8);
+
+            session.setHour(11);
+            assert.equal(session.getHour(), 11);
+        });
+    });
+
+    describe('setMinute() / getMinute()', function() {
+        it('Can set and retrieve minute', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getMinute(), 0);
+
+            session.setMinute(30);
+            assert.equal(session.getMinute(), 30);
+        });
+    });
+
+    describe('passMinutes()', function() {
+        it('Can advance time by a number of minutes', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getHour(), 8);
+            assert.equal(session.getMinute(), 0);
+            session.passMinutes(67);
+            assert.equal(session.getHour(), 9);
+            assert.equal(session.getMinute(), 7);
+        });
+    });
+
+});//end Session
