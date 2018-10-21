@@ -137,10 +137,8 @@ class HexCoord {
         // this code doesn't work for radius == 0; can you see why?
         var cube = this.shift(4, radius);
 
-        var i;
-        var j;
-        for (i = 0; i < 6; i++) {
-            for(j = 0; j < radius; j++) {
+        for (let i = 0; i < 6; i++) {
+            for(let j = 0; j < radius; j++) {
                 results.push(cube);
                 cube = cube.neighbor(i);
             }
@@ -150,12 +148,10 @@ class HexCoord {
 
     spiral(radius) {
         var results = [this];
-        var k;
-        var m;
         var ring;
-        for (k = 1; k <= radius; k++) {
+        for (let k = 1; k <= radius; k++) {
             ring = this.ring(k);
-            for (m = 0; m < ring.length; m++) {
+            for (let m = 0; m < ring.length; m++) {
                 results.push(ring[m]);
             }
         }

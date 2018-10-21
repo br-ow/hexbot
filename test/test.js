@@ -10,6 +10,9 @@ const world_mod = require('../src/World.js');
 var world = world_mod.instance;
 const hex = require('../src/Hex.js');
 const sess = require('../src/Session.js');
+var gm_mod = require('../src/GameMaster.js');
+var gm = gm_mod.instance;
+
 var save = require('../save.json'); //Save file
 
 
@@ -341,7 +344,7 @@ describe('OffsetCoord', function() {
 });// end OffsetCoord
 
 describe('Hex', function() {
-    describe('getCoord', function() {
+    describe('#getCoord', function() {
         it('Able to access a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(1, 2, -3);
             var the_hex = new hex.Hex(spot, "Plains");
@@ -349,7 +352,7 @@ describe('Hex', function() {
         });
     });
 
-    describe('getCoord 2', function() {
+    describe('#getCoord 2', function() {
         it('Able to access a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(3, 2, -5);
             var the_hex = new hex.Hex(spot, "Plains");
@@ -357,14 +360,14 @@ describe('Hex', function() {
         });
     });
 
-    describe('getBiome', function() {
+    describe('#getBiome', function() {
         it('Able to access a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Plains");
             assert.equal(the_hex.getBiome(), "Plains");
         });
     });
-    describe('getBiome 2', function() {
+    describe('#getBiome 2', function() {
         it('Able to access a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Forest");
@@ -404,21 +407,21 @@ describe('World', function() {
 });//end World
 
 describe('Session', function() {
-    describe('hasUser()', function() {
+    describe('#hasUser()', function() {
         it('Should recognize the user we put there.', function() {
             var session = new sess.Session(123);
             assert.equal(session.hasUser(123), true);
         });
     });
 
-    describe('hasUser() 2', function() {
+    describe('#hasUser() 2', function() {
         it('Should not recognize the user we did not put there.', function() {
             var session = new sess.Session(123);
             assert.equal(session.hasUser(456), false);
         });
     });
 
-    describe('addUser()', function() {
+    describe('#addUser()', function() {
         it('Add additional users to the session', function() {
             var session = new sess.Session(123);
             assert.equal(session.numUsers(), 1);
@@ -428,7 +431,7 @@ describe('Session', function() {
         });
     });
 
-    describe('removeUser()', function() {
+    describe('#removeUser()', function() {
         it('Remove a user from the session', function() {
             var session = new sess.Session(123);
             assert.equal(session.numUsers(), 1);
@@ -440,14 +443,14 @@ describe('Session', function() {
         });
     });
 
-    describe('getSeason()', function() {
+    describe('#getSeason()', function() {
         it('Can retrieve season', function() {
             var session = new sess.Session(123);
             assert.equal(session.getSeason(), save.season);
         });
     });
 
-    describe('setSeason()', function() {
+    describe('#setSeason()', function() {
         it('Can set and retrieve season', function() {
             var session = new sess.Session(123);
             assert.equal(session.getSeason(), save.season);
@@ -456,7 +459,7 @@ describe('Session', function() {
         });
     });
 
-    describe('setPos() / getPos()', function() {
+    describe('#setPos() / getPos()', function() {
         it('Can set and retrieve position', function() {
             var session = new sess.Session(123);
             var start_pos = new hex_coord.HexCoord(save.basex, save.basey, save.basez);
@@ -469,7 +472,7 @@ describe('Session', function() {
         });
     });
 
-    describe('setFacing() / getFacing()', function() {
+    describe('#setFacing() / getFacing()', function() {
         it('Can set and retrieve facing', function() {
             var session = new sess.Session(123);
             assert.equal(session.getFacing(), 0);
@@ -479,7 +482,7 @@ describe('Session', function() {
         });
     });
 
-    describe('setHour() / getHour()', function() {
+    describe('#setHour() / getHour()', function() {
         it('Can set and retrieve hour', function() {
             var session = new sess.Session(123);
             assert.equal(session.getHour(), 8);
@@ -489,7 +492,7 @@ describe('Session', function() {
         });
     });
 
-    describe('setMinute() / getMinute()', function() {
+    describe('#setMinute() / getMinute()', function() {
         it('Can set and retrieve minute', function() {
             var session = new sess.Session(123);
             assert.equal(session.getMinute(), 0);
@@ -499,7 +502,7 @@ describe('Session', function() {
         });
     });
 
-    describe('passMinutes()', function() {
+    describe('#passMinutes()', function() {
         it('Can advance time by a number of minutes', function() {
             var session = new sess.Session(123);
             assert.equal(session.getHour(), 8);
@@ -509,5 +512,52 @@ describe('Session', function() {
             assert.equal(session.getMinute(), 7);
         });
     });
-
 });//end Session
+
+describe('GameMaster', function() {
+    describe('#makeSessionFor()', function() {
+        it('Make a new session for a user', function() {
+            gm.makeSessionFor(123);
+            assert.equal(gm.hasSessionWith(123), true);
+        });
+    });
+
+    describe('#makeSessionFor()', function() {
+        it('Do not make session if user is already in one', function() {
+            gm.makeSessionFor(123);
+            assert.equal(gm.makeSessionFor(123), false);
+        });
+    });
+
+    describe('#hasSessionWith()', function() {
+        it('Should return false for a user we have not added yet', function() {
+            assert.equal(gm.hasSessionWith(456), false);
+        });
+    });
+
+    describe('#addUserByTag()', function() {
+        it('Does not add user if they are already in session or if wrong user is tagged', function() {
+            gm.makeSessionFor(123);
+            assert.equal(gm.addUserByTag(123, 123), false);//already in
+            assert.equal(gm.addUserByTag(456, 404), false);//wrong tag
+        });
+    });
+
+    describe('#addUserByTag() 2', function() {
+        it('Add a user to an existing session with another user', function() {
+            gm.makeSessionFor(123);
+            gm.addUserByTag(456, 123);
+            assert.equal(gm.hasSessionWith(456), true);
+        });
+    });
+
+    describe('#removeFromSession()', function() {
+        it('Take the user out of their session', function() {
+            gm.makeSessionFor(123);
+            assert.equal(gm.hasSessionWith(123), true);
+            gm.removeFromSession(123);
+            assert.equal(gm.hasSessionWith(123), false);
+        });
+    });
+
+});//end GameMaster
