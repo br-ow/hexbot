@@ -560,4 +560,25 @@ describe('GameMaster', function() {
         });
     });
 
+    describe('#setFacing()', function() {
+        it('Set the facing of a party with a user.', function() {
+            gm.makeSessionFor(123);
+            assert.equal(gm.getFacing(123), 0);//default
+            gm.setFacing(3, 123); //uses navDir instead of hexDir
+            assert.equal(gm.getFacing(123), 3);
+        });
+    });
+    describe('#walkHr()', function() {
+        it('Walk in a direction for some hours', function() {
+            gm.makeSessionFor(123);
+            gm.setFacing(0, 123); //uses navDir instead of hexDir; NE
+            var expected_spot = gm.getPos(123);
+            expected_spot = expected_spot.shift(0, 1.5);
+            gm.walkHr(3, 123);
+            assert.equal(gm.getPos(123).equals(expected_spot), true);
+        });
+    });
+
+
+
 });//end GameMaster

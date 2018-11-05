@@ -22,12 +22,12 @@ var worldInstance = (function() {
     var map = new HashMap();
 
     //Make more hexes
-    function genHexes (where) {
+    function __genHexes (where) {
         //will add if/else here later when fleshing out world gen
-        dummyGen(where);
+        __dummyGen(where);
     }
 
-    function dummyGen(where) {
+    function __dummyGen(where) {
         map.set(where.toString(), new hex.Hex(where, "Plains"));
     }
 
@@ -43,7 +43,7 @@ var worldInstance = (function() {
             }
             else {
                 //Generate more hexes!
-                genHexes(which_coord);
+                __genHexes(which_coord);
             }
 
             return map.get(which_coord.toString());

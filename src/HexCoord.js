@@ -160,6 +160,18 @@ class HexCoord {
 
 }//end class
 
-
+exports.direction = function direction(direction) {
+    /* Initial definition now that HexCoord has been defined
+     * Since we're using FLAT-TOPPED hexes, directions are :
+     * 0 = NE;  1 = SE;  2 = S
+     * 3 = SW;  4 = NW;  5 = N
+     * 6 = E; 7 = W
+     */
+    
+    const dirs = [new HexCoord(1, 0, -1), new HexCoord(1, -1, 0),
+     new HexCoord(0, -1, 1), new HexCoord(-1, 0, 1), new HexCoord(-1, 1, 0),
+      new HexCoord(0, 1, -1), new HexCoord(1, -0.5, -0.5), new HexCoord(-1, 0.5, 0.5)];
+    return dirs[direction];
+};
 
 exports.HexCoord = HexCoord;
