@@ -29,16 +29,20 @@ client.on('message', message => {
         message.channel.send("bar!");
     } else
     if (message.content.startsWith(config.prefix + "commands")) {
-        message.channel.send(`Current Commands are: 
+        message.author.send(`Current Commands are: 
          ${config.prefix}commands : Tells you the bot commands!
          ${config.prefix}ping : Gets back a pong.
+         -------------------- Managing Sessions ------------------
          ${config.prefix}sessions : Lists currently active sessions.
-         ${config.prefix}newsess : Create a new session and join it.
-         ${config.prefix}joinsess [mention/number] : Join the session of that number or that the mentioned user is in.
-         ${config.prefix}quitsess : Leave your current session.`);
+         ${config.prefix}newsess : Create a new session and join it (if you are not already in a session).
+         ${config.prefix}joinsess [mention/number] : Join the session of that number or that the mentioned user is in (if you are not already in a session).
+         ${config.prefix}quitsess : Leave your current session.
+         ----------------------- Gameplay ------------------------
+         ${config.prefix}walkhr [number hours]: Walk your party forward for that many hours.
+         ${config.prefix}pos: Reports your party's position (TEMPORARY).`);
     } else
     if (message.content.startsWith(config.prefix + "sessions")) {
-        message.channel.send(gm.listSessions());
+        message.author.send(gm.listSessions());
     } else
     if (message.content.startsWith(config.prefix + "newsess")) {
         success = gm.makeSessionFor(message.author.tag);
@@ -57,7 +61,7 @@ client.on('message', message => {
             //just join them
             success = gm.addUserByTag(message.author.tag, join.tag);
             if (success === true) {
-                message.channel.send("Successfully joined the session!");
+                message.channel.send(`Successfully joined the session with ${join.username}!`);
             }
             else {
                 message.channel.send("Command failed; check if that person in a session right now.");
@@ -67,7 +71,7 @@ client.on('message', message => {
             //let's try joining it
             success = gm.addUserByIndex(message.author.tag, snum);
             if (success === true) {
-                message.channel.send("Successfully joined the session!");
+                message.channel.send(`Successfully joined session ${snum}!`);
             }
             else {
                 message.channel.send("Command failed; is that a real session, and are you not already in a session?");
@@ -85,6 +89,30 @@ client.on('message', message => {
         }
         else {
             message.channel.send("Command failed; are you actually in a session?");
+        }
+    } else
+    if (message.content.startsWith(config.prefix + "walkhr")) {//walk the party along
+        const walkfor = Number(message.content.split(' ')[1]);
+        if (isNaN(walkfor) === false) { //walk for a valid number of hours
+            success = gm.walkHr(walkfor, message.author.tag);
+            if (success === true) {
+                message.channel.send(`You walk forward for about ${walkfor} hours.`);
+            }
+            else {//the user probably isn't in a session
+                message.channel.send("Command failed; you must be in a session first!");
+            }
+        }
+        else {//invalid number of hours
+            message.channel.send("Command failed; please use a number (in hours).");
+        }
+    } else
+    if (message.content.startsWith(config.prefix + "pos")) {
+        const pos = gm.getPos(message.author.tag);
+        if (pos === -1) { //couldn't find user
+            message.channel.send("Command failed; are you actually in a session?");
+        }
+        else {
+            message.channel.send(`You are at (${pos.getQ()}, ${pos.getR()}, ${pos.getS()}).`);
         }
     }
 });
