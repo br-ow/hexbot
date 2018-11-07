@@ -117,6 +117,28 @@ var gmInstance = (function() {
             return __sessions;
         },
 
+        listSessions: function () {
+            var output = "";
+            if (__sessions.length === 0) {
+                output = "There are no active sessions currently!";
+            }
+            else {
+                output = "Current Sessions: ";
+                var users;
+                var biome;
+                __sessions.forEach(function(sess, index, array) {
+                    output += `\n Session ${index}: \n  Users: `;
+                    users = sess.getUsers();
+                    users.forEach(function(user, index, array) {
+                        output += `${user}; `;
+                    });
+                    biome = world.getHex(sess.getPos().round()).getBiome();
+                    output += `\n  Biome: ${biome}`;
+                });
+            }
+            return output;
+        },
+
         hasSessionWith: function (user) {
 
             var answer = false;
@@ -154,12 +176,29 @@ var gmInstance = (function() {
             return success;
         },
 
+        addUserByIndex: function (new_user, index) {
+            var success;
+            var try_index = math.round(index);
+            if (this.hasSessionWith(new_user) || (try_index < 0) || (try_index >= __sessions.length)) {
+                success = false;
+            }
+            else {
+                success = true;
+                (__sessions[index]).addUser(new_user);
+            }
+            return success;
+        },
+
         removeFromSession: function (user) {
             var success;
             if (this.hasSessionWith(user)) {
                 success = true;
                 var s_index = __whichSessionHas(user);
                 (__sessions[s_index]).removeUser(user);
+                if((__sessions[s_index]).numUsers() <= 0) {
+                    //if a session has no users, end it
+                    __sessions.splice(s_index, 1);
+                }
             }
             else {
                 success = false;

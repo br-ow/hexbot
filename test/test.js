@@ -568,6 +568,7 @@ describe('GameMaster', function() {
             assert.equal(gm.getFacing(123), 3);
         });
     });
+    
     describe('#walkHr()', function() {
         it('Walk in a direction for some hours', function() {
             gm.makeSessionFor(123);
