@@ -580,6 +580,24 @@ describe('GameMaster', function() {
         });
     });
 
+    describe('#turn()', function() {
+        it('Turn a number of 45 degree increments.', function() {
+            gm.makeSessionFor(234);
+            gm.setFacing(3, 234); //uses navDir instead of hexDir
+            assert.equal(gm.getFacing(234), 3);
+            gm.turn(3, 234);
+            assert.equal(gm.getFacing(234), 6);
+        });
+    });
 
+    describe('#turn() 2', function() {
+        it('Turn a number of 45 degree increments.', function() {
+            gm.makeSessionFor(234);
+            gm.setFacing(3, 234); //uses navDir instead of hexDir
+            assert.equal(gm.getFacing(234), 3);
+            gm.turn(-3, 234);
+            assert.equal(gm.getFacing(234), 0);
+        });
+    });
 
 });//end GameMaster

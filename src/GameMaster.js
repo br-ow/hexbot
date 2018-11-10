@@ -117,6 +117,7 @@ var gmInstance = (function() {
             return __sessions;
         },
 
+        //Outputs string info on all active sessions (users and biome)
         listSessions: function () {
             var output = "";
             if (__sessions.length === 0) {
@@ -139,6 +140,9 @@ var gmInstance = (function() {
             return output;
         },
 
+        //Checks if we have a session with that user
+        //somewhat invalidated by the whichSessionHas() function
+        //so may be removed later
         hasSessionWith: function (user) {
 
             var answer = false;
@@ -150,6 +154,7 @@ var gmInstance = (function() {
             return answer;
         },
 
+        //Make a session for this user, if they aren't in one already
         makeSessionFor: function (new_user) {
             var success;
             if (this.hasSessionWith(new_user)) {
@@ -162,6 +167,7 @@ var gmInstance = (function() {
             return success;
         },
 
+        //Adds the user to the same session that the tag_user is in.
         addUserByTag: function (new_user, tag_user) {
             var success;
             var tag_index = __whichSessionHas(tag_user);
@@ -176,6 +182,7 @@ var gmInstance = (function() {
             return success;
         },
 
+        //Adds the user to the session that matches the given index
         addUserByIndex: function (new_user, index) {
             var success;
             var try_index = math.round(index);
@@ -189,6 +196,7 @@ var gmInstance = (function() {
             return success;
         },
 
+        //take this user out of whatever session they're in
         removeFromSession: function (user) {
             var success;
             if (this.hasSessionWith(user)) {
@@ -233,6 +241,41 @@ var gmInstance = (function() {
             return answer;
         },
 
+        //Turns the user's party in a number of 45 degree increments
+        //Positive numbers are clockwise; negative is counter-clockwise
+        turn: function (amount, user) {//uses __navDir directions
+            var nav_face;
+            var new_nav_face;
+            var new_hex_face;
+            var success
+            var which_s = __whichSessionHas(user);
+
+            if (which_s === -1) {
+                success = false;
+            }
+            else {
+                /*
+                 * Since we're using FLAT-TOPPED hexes, directions are:
+                 * 0 = NE;  1 = E;  2 = SE
+                 * 3 = S;  4 = SW;  5 = W
+                 * 6 = NW; 7 = N
+                 */
+                success = true;
+                nav_face = __HexToNav(__sessions[which_s].getFacing());
+                new_nav_face = nav_face + math.round(amount); //only integers
+
+                //now to ensure that we have a number within the valid range
+                if (math.abs(new_nav_face) > 7) {
+                    new_nav_face = new_nav_face % 8; //only directions are 0 to 7
+                }
+                if (new_nav_face < 0) {
+                    new_nav_face = new_nav_face + 8; //push it positive again.
+                }
+                __sessions[which_s].setFacing(__NavToHex(new_nav_face));
+            }
+            return success;
+        },
+
         getPos: function (user) {//uses __navDir directions
             var answer;
             var which_s = __whichSessionHas(user);
@@ -258,7 +301,7 @@ var gmInstance = (function() {
                 success = true;
                 var session = __sessions[which_s];
                 var pos = session.getPos();
-                var facing = session.getFacing();
+                var facing = session.getFacing(); //Hex_dir facing
                 var distance = (Number(config.travel_rate))*(Number(hours));
                 var new_pos = pos.shift(facing, distance);
                 session.setPos(new_pos);

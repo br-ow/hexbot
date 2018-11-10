@@ -27,7 +27,8 @@ var worldInstance = (function() {
         __dummyGen(where);
     }
 
-    function __dummyGen(where) {
+    //dummy world-generation method that creates a boring but valid world
+    function __dummyGen(where) { 
         map.set(where.toString(), new hex.Hex(where, "Plains"));
     }
 
@@ -37,6 +38,8 @@ var worldInstance = (function() {
 
     return { // public interface
         // all private members are accesible here
+
+        //gets a hex, or generates it if it doesn't exist
         getHex: function (which_coord) {
             if (map.has(which_coord.toString())) {
                 //Everything is fine
@@ -48,6 +51,8 @@ var worldInstance = (function() {
 
             return map.get(which_coord.toString());
         },
+
+        //used for updating hexes (building, etc)
         setHex: function (which_coord, which_hex) {
             map.set(which_coord.toString(), which_hex);
         }

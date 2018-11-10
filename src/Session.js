@@ -94,6 +94,8 @@ class Session {
         __(this).time.setMinutes(new_minute);
     }
 
+    //Increment time by the given number of minutes
+    //updates hours accordingly
     passMinutes(mins_passed) {
         var time = __(this).time;
         var new_mins = mins_passed + time.getMinutes();

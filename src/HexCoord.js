@@ -59,6 +59,7 @@ class HexCoord {
         return answer;
     }
 
+    //multiplication
     scale(k) {
         return new HexCoord(__(this).q * k, __(this).r * k, __(this).s * k);
     }
