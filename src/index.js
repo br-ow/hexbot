@@ -1,5 +1,7 @@
 /*
- * A ping pong bot, whenever you send "ping", it replies "pong".
+ * Main bot file for Hexbot
+ * Author: Brifactor
+ * Starting-point/Reference: https://discord.js.org/#/docs/main/stable/examples/ping
  */
 
 //Includes

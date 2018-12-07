@@ -12,6 +12,7 @@ const hex = require('../src/Hex.js');
 const sess = require('../src/Session.js');
 var gm_mod = require('../src/GameMaster.js');
 var gm = gm_mod.instance;
+var landmark = require('../src/Landmark.js');
 
 var save = require('../save.json'); //Save file
 
@@ -601,3 +602,74 @@ describe('GameMaster', function() {
     });
 
 });//end GameMaster
+
+describe('Landmark', function() {
+    describe('getPos()', function() {
+        it('Can make a landmark and get its position', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
+            assert.equal(landm.getPos().equals(pos), true);
+        });
+    });
+    describe('setPos()', function() {
+        it('Can get and set landmark position', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
+            var new_pos = new hex_coord.HexCoord(1.4, 1.6, -3);
+            landm.setPos(new_pos);
+            assert.equal(landm.getPos().equals(new_pos), true);
+            assert.equal(landm.getPos().equals(pos), false);
+        });
+    });
+    describe('getCloseDesc() / setCloseDesc()', function() {
+        it('Can get and set landmark description (up close)', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
+            assert.equal(landm.getCloseDesc(), "a large, old tree with many gnarled branches");
+            landm.setCloseDesc("a tall pine tree");
+            assert.equal(landm.getCloseDesc(), "a tall pine tree");
+        });
+    });
+
+    describe('getFarDesc() / setFarDesc()', function() {
+        it('Can get and set landmark description (far away)', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
+            assert.equal(landm.getFarDesc(), "a big tree");
+            landm.setFarDesc("a gnarled tree");
+            assert.equal(landm.getFarDesc(), "a gnarled tree");
+        });
+    });
+
+    describe('getSpotEase() / setSpotEase()', function() {
+        it('Can get and set spot ease (affects how close you must be to see it)', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
+            assert.equal(landm.getSpotEase(), 1);
+            landm.setSpotEase(0.5);
+            assert.equal(landm.getSpotEase(), 0.5);
+        });
+    });
+
+    describe('canSpot()', function() {
+        it('Tests whether or not you can spot the landmark from a position with a certain sight radius', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
+            var new_pos = new hex_coord.HexCoord(1.3, 1.7, -3);
+            landm.setSpotEase(1);
+            assert.equal(landm.canSpot(new_pos, 1), true);
+
+        });
+    });
+
+    describe('canSpot() 2', function() {
+        it('Tests whether or not you can spot the landmark from a position with a certain sight radius', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
+            var new_pos = new hex_coord.HexCoord(1.3, 1.7, -3);
+            landm.setSpotEase(0.1);
+            assert.equal(landm.canSpot(new_pos, 1), false);
+
+        });
+    });
+});//end Landmark
