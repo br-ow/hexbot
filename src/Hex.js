@@ -20,6 +20,7 @@ class Hex {
     constructor (coordinate, biome) {
         __(this).coord = coordinate;
         __(this).biome = biome;
+        __(this).landmarks = []; //can include player-made landmarks later
         //add more here as we have more to add.
     }
 
@@ -37,6 +38,22 @@ class Hex {
 
     setBiome(new_biome) {
         __(this).biome = new_biome;
+    }
+
+    numLandmarks() {
+        return __(this).landmarks.length;
+    }
+
+    addLandmark(new_lan) {
+        __(this).landmarks.push(new_lan);
+    }
+
+    getLandmark(index) {
+        return __(this).landmarks[index];
+    }
+
+    delLandmark(index) {
+        __(this).landmarks.splice(index, 1);
     }
 
 }//end class

@@ -8,6 +8,7 @@
 const HashMap = require('hashmap');
 const coord = require('./HexCoord.js');
 const hex = require('./Hex.js');
+var lmake = require('./LandmarkMaker.js');
 const config = require('../config.json'); //Config file
 
 /* Planned features:
@@ -28,8 +29,10 @@ var worldInstance = (function() {
     }
 
     //dummy world-generation method that creates a boring but valid world
-    function __dummyGen(where) { 
-        map.set(where.toString(), new hex.Hex(where, "Plains"));
+    function __dummyGen(where) {
+        var hux = new hex.Hex(where, "Plains");
+        hux.addLandmark(lmake.instance.makeLandmark(where, hux.getBiome()));
+        map.set(where.toString(), hux);
     }
 
     //function privateMethod () {

@@ -13,6 +13,8 @@ const sess = require('../src/Session.js');
 var gm_mod = require('../src/GameMaster.js');
 var gm = gm_mod.instance;
 var landmark = require('../src/Landmark.js');
+var landmark_make = require('../src/LandmarkMaker.js');
+var lmaker = landmark_make.instance;
 
 var save = require('../save.json'); //Save file
 
@@ -26,43 +28,43 @@ describe('Array', function() {
 });
 
 describe('HexCoord', function() {
-    describe('#getQ', function() {
+    describe('#getQ()', function() {
         it('should retrieve q value of coordinate', function() {
             assert.equal((new hex_coord.HexCoord(1, 2, -3)).getQ(), 1);
         });
     });
 
-    describe('#getQ 2', function() {
+    describe('#getQ() 2', function() {
         it('should retrieve q value of coordinate', function() {
             assert.equal(new hex_coord.HexCoord(-3, 2, 1).getQ(), -3);
         });
     });
 
-    describe('#getR', function() {
+    describe('#getR()', function() {
         it('should retrieve r value of coordinate', function() {
             assert.equal(new hex_coord.HexCoord(1, 2, -3).getR(), 2);
         });
     });
 
-    describe('#getR 2', function() {
+    describe('#getR() 2', function() {
         it('should retrieve r value of coordinate', function() {
             assert.equal(new hex_coord.HexCoord(1, -3, 2).getR(), -3);
         });
     });
 
-    describe('#getS', function() {
+    describe('#getS()', function() {
         it('should retrieve s value of coordinate', function() {
             assert.equal(new hex_coord.HexCoord(1, 2, -3).getS(), -3);
         });
     });
 
-    describe('#getS 2', function() {
+    describe('#getS() 2', function() {
         it('should retrieve s value of coordinate', function() {
             assert.equal(new hex_coord.HexCoord(-3, 2, 1).getS(), 1);
         });
     });
 
-    describe('#add', function() {
+    describe('#add()', function() {
         it('add two HexCoords together', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             var add_dir = new hex_coord.HexCoord(1, 0, -1);
@@ -70,7 +72,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#add 2', function() {
+    describe('#add() 2', function() {
         it('add two HexCoords together', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             var add_dir = new hex_coord.HexCoord(-1, 0, 1);
@@ -78,7 +80,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#subtract', function() {
+    describe('#subtract()', function() {
         it('subtract two HexCoords', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             var sub_dir = new hex_coord.HexCoord(1, 0, -1);
@@ -86,7 +88,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#subtract 2', function() {
+    describe('#subtract() 2', function() {
         it('subtract two HexCoords', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             var sub_dir = new hex_coord.HexCoord(-1, 0, 1);
@@ -94,62 +96,62 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#scale', function() {
+    describe('#scale()', function() {
         it('multiply a HexCoord', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             assert.equal(starting_spot.scale(2).equals(new hex_coord.HexCoord(2, 4, -6)), true);
         });
     });
 
-    describe('#scale 2', function() {
+    describe('#scale() 2', function() {
         it('multiply a HexCoord', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             assert.equal(starting_spot.scale(3).equals(new hex_coord.HexCoord(3, 6, -9)), true);
         });
     });
 
-    describe('#rotateLeft', function() {
+    describe('#rotateLeft()', function() {
         it('rotate HexCoord to the left', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             assert.equal(starting_spot.rotateLeft().equals(new hex_coord.HexCoord(3, -1, -2)), true);
         });
     });
 
-    describe('#rotateRight', function() {
+    describe('#rotateRight()', function() {
         it('rotate HexCoord to the right', function() {
             var starting_spot = new hex_coord.HexCoord(1, 2, -3);
             assert.equal(starting_spot.rotateRight().equals(new hex_coord.HexCoord(-2, 3, -1)), true);
         });
     });
 
-    describe('#direction', function() {
+    describe('#direction()', function() {
         it('get a direction', function() {
             assert.equal(new hex_coord.HexCoord(0,0,0).direction(4).equals(new hex_coord.HexCoord(-1, 1, 0)), true);
         });
     });
 
-    describe('#neighbor', function() {
+    describe('#neighbor()', function() {
         it('get a neighbor', function() {
             var starting_spot = new hex_coord.HexCoord(1, -2, 1);
             assert.equal(starting_spot.neighbor(1).equals(new hex_coord.HexCoord(2, -3, 1)), true);
         });
     });
 
-    describe('#length', function() {
+    describe('#length()', function() {
         it('distance from hex to center?', function() {
             var starting_spot = new hex_coord.HexCoord(4, -4, 0);
             assert.equal(starting_spot.length(), 4);
         });
     });
 
-    describe('#length 2', function() {
+    describe('#length() 2', function() {
         it('distance from hex to center?', function() {
             var starting_spot = new hex_coord.HexCoord(3, 2, -5);
             assert.equal(starting_spot.length(), 5);
         });
     });
 
-    describe('#distance', function() {
+    describe('#distance()', function() {
         it('distance between two hexes', function() {
             var starting_spot = new hex_coord.HexCoord(1, -2, 1);
             var ending_spot = new hex_coord.HexCoord(1, 2, -3);
@@ -157,7 +159,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#distance 2', function() {
+    describe('#distance() 2', function() {
         it('distance between two hexes', function() {
             var starting_spot = new hex_coord.HexCoord(1, -2, 1);
             var ending_spot = new hex_coord.HexCoord(1, 1, -2);
@@ -165,7 +167,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#round', function() {
+    describe('#round()', function() {
         it('round fractional HexCoord to the nearest hex', function() {
             var starting_spot = new hex_coord.HexCoord(1.6, -3, 1.4);
             var rounds_to = new hex_coord.HexCoord(2, -3, 1);
@@ -173,7 +175,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#round 2', function() {
+    describe('#round() 2', function() {
         it('round fractional HexCoord to the nearest hex', function() {
             var starting_spot = new hex_coord.HexCoord(1.6, 1.4, -3);
             var rounds_to = new hex_coord.HexCoord(2, 1, -3);
@@ -181,7 +183,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#shift', function() {
+    describe('#shift()', function() {
         it('move a hex y spaces in x direction', function() {
             var starting_spot = new hex_coord.HexCoord(-2, -1, 3);
             var ending_spot = new hex_coord.HexCoord(2, -1, -1);
@@ -189,7 +191,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#shift 2', function() {
+    describe('#shift() 2', function() {
         it('move a hex y spaces in x direction', function() {
             var starting_spot = new hex_coord.HexCoord(1, -3, 2);
             var ending_spot = new hex_coord.HexCoord(-1, -1, 2);
@@ -197,23 +199,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#shift 2', function() {
-        it('move a hex y spaces in x direction', function() {
-            var starting_spot = new hex_coord.HexCoord(1, -3, 2);
-            var ending_spot = new hex_coord.HexCoord(-1, -1, 2);
-            assert.equal(starting_spot.shift(4, 2).equals(ending_spot), true);
-        });
-    });
-
-    describe('#shift 2', function() {
-        it('move a hex y spaces in x direction', function() {
-            var starting_spot = new hex_coord.HexCoord(1, -3, 2);
-            var ending_spot = new hex_coord.HexCoord(-1, -1, 2);
-            assert.equal(starting_spot.shift(4, 2).equals(ending_spot), true);
-        });
-    });
-
-    describe('#ring (length)', function() {
+    describe('#ring() (length)', function() {
         it('get an array of HexCoords a specific distance from the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
             var ring = starting_spot.ring(1);
@@ -221,7 +207,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#ring 2', function() {
+    describe('#ring() 2', function() {
         it('get an array of HexCoords a specific distance from the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
             var ring = starting_spot.ring(1);
@@ -230,7 +216,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#ring 3', function() {
+    describe('#ring() 3', function() {
         it('get an array of HexCoords a specific distance from the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
             var ring = starting_spot.ring(1);
@@ -239,7 +225,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#ring 4 (length)', function() {
+    describe('#ring() 4 (length)', function() {
         it('get an array of HexCoords a specific distance from the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(1, -1, 0);
             var ring = starting_spot.ring(2);
@@ -247,7 +233,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#ring 5', function() {
+    describe('#ring() 5', function() {
         it('get an array of HexCoords a specific distance from the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(1, -1, 0);
             var ring = starting_spot.ring(2);
@@ -256,7 +242,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#spiral (length)', function() {
+    describe('#spiral() (length)', function() {
         it('get an array of HexCoords surrounding the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
             var spiral = starting_spot.spiral(2);
@@ -264,7 +250,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#spiral 2', function() {
+    describe('#spiral() 2', function() {
         it('get an array of HexCoords surrounding the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
             var spiral = starting_spot.spiral(2);
@@ -273,7 +259,7 @@ describe('HexCoord', function() {
         });
     });
 
-    describe('#spiral 3', function() {
+    describe('#spiral() 3', function() {
         it('get an array of HexCoords surrounding the given spot', function() {
             var starting_spot = new hex_coord.HexCoord(-1, 0, 1);
             var spiral = starting_spot.spiral(2);
@@ -286,31 +272,31 @@ describe('HexCoord', function() {
 
 describe('OffsetCoord', function() {
 
-    describe('#getCol', function() {
+    describe('#getCol()', function() {
         it('should retrieve col value of coordinate', function() {
             assert.equal((new offs_coord.OffsetCoord(1, 2)).getCol(), 1);
         });
     });
 
-    describe('#getCol 2', function() {
+    describe('#getCol() 2', function() {
         it('should retrieve col value of coordinate', function() {
             assert.equal(new offs_coord.OffsetCoord(-3, 2).getCol(), -3);
         });
     });
 
-    describe('#getRow', function() {
+    describe('#getRow()', function() {
         it('should retrieve row value of coordinate', function() {
             assert.equal(new offs_coord.OffsetCoord(1, 2).getRow(), 2);
         });
     });
 
-    describe('#getRow 2', function() {
+    describe('#getRow() 2', function() {
         it('should retrieve row value of coordinate', function() {
             assert.equal(new offs_coord.OffsetCoord(1, -3).getRow(), -3);
         });
     });
 
-    describe('#toCube', function() {
+    describe('#toCube()', function() {
         it('Convert offset coordinate to cube coordinate', function() {
             var starting_spot = new offs_coord.OffsetCoord(1, 2);
             var converted = new hex_coord.HexCoord(1, 1, -2);
@@ -318,7 +304,7 @@ describe('OffsetCoord', function() {
         });
     });
 
-    describe('#toCube 2', function() {
+    describe('#toCube() 2', function() {
         it('Convert offset coordinate to cube coordinate', function() {
             var starting_spot = new offs_coord.OffsetCoord(2, 1);
             var converted = new hex_coord.HexCoord(2, 0, -2);
@@ -326,7 +312,7 @@ describe('OffsetCoord', function() {
         });
     });
 
-    describe('#fromCube', function() {
+    describe('#fromCube()', function() {
         it('Convert cube coordinate to offset coordinate', function() {
             var starting_spot = new hex_coord.HexCoord(2, 0, -2);
             var converted = new offs_coord.OffsetCoord(2, 1);
@@ -334,7 +320,7 @@ describe('OffsetCoord', function() {
         });
     });
 
-    describe('#fromCube 2', function() {
+    describe('#fromCube() 2', function() {
         it('Convert cube coordinate to offset coordinate', function() {
             var starting_spot = new hex_coord.HexCoord(1, 1, -2);
             var converted = new offs_coord.OffsetCoord(1, 2);
@@ -345,7 +331,7 @@ describe('OffsetCoord', function() {
 });// end OffsetCoord
 
 describe('Hex', function() {
-    describe('#getCoord', function() {
+    describe('#getCoord()', function() {
         it('Able to access a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(1, 2, -3);
             var the_hex = new hex.Hex(spot, "Plains");
@@ -353,28 +339,67 @@ describe('Hex', function() {
         });
     });
 
-    describe('#getCoord 2', function() {
-        it('Able to access a hexs coordinate', function() {
+    describe('#getCoord() / setcoord()', function() {
+        it('Able to access and change a hexs coordinate', function() {
             var spot = new hex_coord.HexCoord(3, 2, -5);
             var the_hex = new hex.Hex(spot, "Plains");
             assert.equal(the_hex.getCoord().equals(spot), true);
+            var new_spot = new hex_coord.HexCoord(-2, 1, 1);
+            the_hex.setCoord(new_spot);
+            assert.equal(the_hex.getCoord().equals(spot), false);
+            assert.equal(the_hex.getCoord().equals(new_spot), true);
         });
     });
 
-    describe('#getBiome', function() {
+    describe('#getBiome()', function() {
         it('Able to access a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Plains");
             assert.equal(the_hex.getBiome(), "Plains");
         });
     });
-    describe('#getBiome 2', function() {
-        it('Able to access a hexs biome', function() {
+
+    describe('#getBiome() / setBiome()', function() {
+        it('Able to access and change a hexs biome', function() {
             var spot = new hex_coord.HexCoord(-3, 2, 1);
             var the_hex = new hex.Hex(spot, "Forest");
             assert.equal(the_hex.getBiome(), "Forest");
+            the_hex.setBiome("Plains");
+            assert.equal(the_hex.getBiome(), "Plains");
         });
     });
+
+    describe('#numLandmarks() / addLandmark()', function() {
+        it('Able to count and add landmarks', function() {
+            var spot = new hex_coord.HexCoord(-3, 2, 1);
+            var the_hex = new hex.Hex(spot, "Plains");
+            assert.equal(the_hex.numLandmarks(), 0);
+            the_hex.addLandmark("a red flower");
+            assert.equal(the_hex.numLandmarks(), 1);
+        });
+    });
+
+    describe('#addLandmark() / getLandmark()', function() {
+        it('Able to add and retrieve landmarks', function() {
+            var spot = new hex_coord.HexCoord(-3, 2, 1);
+            var the_hex = new hex.Hex(spot, "Plains");
+            the_hex.addLandmark("a red flower");
+            assert.equal(the_hex.getLandmark(0), "a red flower");
+        });
+    });
+
+    describe('#delLandmark()', function() {
+        it('Able to add and delete landmarks', function() {
+            var spot = new hex_coord.HexCoord(-3, 2, 1);
+            var the_hex = new hex.Hex(spot, "Plains");
+            the_hex.addLandmark("a blue flower");
+            assert.equal(the_hex.getLandmark(0), "a blue flower");
+            the_hex.addLandmark("a pink flower");
+            the_hex.delLandmark(0);
+            assert.equal(the_hex.getLandmark(0), "a pink flower");
+        });
+    });
+
 });//end Hex
 
 describe('World', function() {
@@ -600,18 +625,17 @@ describe('GameMaster', function() {
             assert.equal(gm.getFacing(234), 0);
         });
     });
-
 });//end GameMaster
 
 describe('Landmark', function() {
-    describe('getPos()', function() {
+    describe('#getPos()', function() {
         it('Can make a landmark and get its position', function() {
             var pos = new hex_coord.HexCoord(1, 2, -3);
             var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
             assert.equal(landm.getPos().equals(pos), true);
         });
     });
-    describe('setPos()', function() {
+    describe('#setPos()', function() {
         it('Can get and set landmark position', function() {
             var pos = new hex_coord.HexCoord(1, 2, -3);
             var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
@@ -621,7 +645,7 @@ describe('Landmark', function() {
             assert.equal(landm.getPos().equals(pos), false);
         });
     });
-    describe('getCloseDesc() / setCloseDesc()', function() {
+    describe('#getCloseDesc() / setCloseDesc()', function() {
         it('Can get and set landmark description (up close)', function() {
             var pos = new hex_coord.HexCoord(1, 2, -3);
             var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
@@ -631,7 +655,7 @@ describe('Landmark', function() {
         });
     });
 
-    describe('getFarDesc() / setFarDesc()', function() {
+    describe('#getFarDesc() / setFarDesc()', function() {
         it('Can get and set landmark description (far away)', function() {
             var pos = new hex_coord.HexCoord(1, 2, -3);
             var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
@@ -641,7 +665,7 @@ describe('Landmark', function() {
         });
     });
 
-    describe('getSpotEase() / setSpotEase()', function() {
+    describe('#getSpotEase() / setSpotEase()', function() {
         it('Can get and set spot ease (affects how close you must be to see it)', function() {
             var pos = new hex_coord.HexCoord(1, 2, -3);
             var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
@@ -651,7 +675,7 @@ describe('Landmark', function() {
         });
     });
 
-    describe('canSpot()', function() {
+    describe('#canSpot()', function() {
         it('Tests whether or not you can spot the landmark from a position with a certain sight radius', function() {
             var pos = new hex_coord.HexCoord(1, 2, -3);
             var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
@@ -662,14 +686,23 @@ describe('Landmark', function() {
         });
     });
 
-    describe('canSpot() 2', function() {
+    describe('#canSpot() 2', function() {
         it('Tests whether or not you can spot the landmark from a position with a certain sight radius', function() {
             var pos = new hex_coord.HexCoord(1, 2, -3);
             var landm = new landmark.Landmark(pos, "a large, old tree with many gnarled branches", "a big tree");
             var new_pos = new hex_coord.HexCoord(1.3, 1.7, -3);
             landm.setSpotEase(0.1);
             assert.equal(landm.canSpot(new_pos, 1), false);
-
         });
     });
 });//end Landmark
+
+describe('LandmarkMaker', function() {
+    describe('#makeLandmark()', function() {
+        it('creates a valid landmark within the given hex', function() {
+            var pos = new hex_coord.HexCoord(1, 2, -3);
+            var landm = lmaker.makeLandmark(pos, "Plains");
+            assert.equal(landm.getPos().round().equals(pos), true);
+        });
+    });
+});//end LandmarkMaker
