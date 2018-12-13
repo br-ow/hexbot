@@ -433,6 +433,31 @@ describe('World', function() {
 });//end World
 
 describe('Session', function() {
+    describe('#getState()', function() {
+        it('Session starts in the FREE state', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+        });
+    });
+
+    describe('#setState()', function() {
+        it('Can set and get state', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+            session.setState(sess.StateEnum.FIGHT);
+            assert.equal(session.getState(), sess.StateEnum.FIGHT);
+        });
+    });
+
+    describe('#setState() 2', function() {
+        it('Cannot set to invalid state', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+            session.setState("eating");
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+        });
+    });
+
     describe('#hasUser()', function() {
         it('Should recognize the user we put there.', function() {
             var session = new sess.Session(123);
