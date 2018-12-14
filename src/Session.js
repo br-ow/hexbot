@@ -27,30 +27,16 @@ class Session {
         __(this).users = [starting_user];
         __(this).season = save.season;
         __(this).coord = new coord.HexCoord(save.basex, save.basey, save.basez);
-        __(this).facing = 0;
+        __(this).facing = 0; //where we're going
         __(this).state = StateEnum.FREE;
-        __(this).destination = null;
+        __(this).destination = null; //only used for landmark-based navigation.
+        __(this).ignores = []; //landmarks the party has already seen this watch
+
         //Add rations remaining later.
 
         __(this).time = new Date();
         __(this).time.setHours(8); //Start at 8 AM
         __(this).time.setMinutes(0);
-    }
-
-    getState() {
-        return __(this).state;
-    }
-
-    setState(new_state) {
-        if ((new_state === StateEnum.FREE) || (new_state === StateEnum.NAVI) ||
-         (new_state === StateEnum.ENCTR) || (new_state === StateEnum.FIGHT) ||
-         (new_state === StateEnum.CAMP)) {
-            __(this).state = new_state;
-            return true; //success
-        }
-        else {
-            return false; //failure
-        }
     }
 
     hasUser(user) {
@@ -137,7 +123,48 @@ class Session {
         __(this).time.setHours(new_hours, new_mins, 0);
     }
 
-}
+    getState() {
+        return __(this).state;
+    }
+
+    setState(new_state) {
+        if ((new_state === StateEnum.FREE) || (new_state === StateEnum.NAVI) ||
+         (new_state === StateEnum.ENCTR) || (new_state === StateEnum.FIGHT) ||
+         (new_state === StateEnum.CAMP)) {
+            __(this).state = new_state;
+            return true; //success
+        }
+        else {
+            return false; //failure
+        }
+    }
+
+    addIgnore(new_ignore) {
+        __(this).ignores.push(new_ignore);
+    }
+
+    isIgnoring(a_landmark) {
+        var have = false;
+        __(this).ignores.forEach(function(item, index, array) {
+            if(item === a_landmark) {
+                have = true;
+            }
+        });
+        return have;
+    }
+
+    unIgnore(a_landmark) {
+        __(this).ignores.forEach(function (item, index, array) {
+            if (item === a_landmark) {
+                array.splice(index, 1);
+            }
+        });
+    }
+
+    clearIgnores() {
+        __(this).ignores = [];
+    }
+}//end Session
 
 exports.Session = Session;
 exports.StateEnum = StateEnum;

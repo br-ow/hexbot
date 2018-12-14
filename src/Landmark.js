@@ -58,6 +58,11 @@ class Landmark {
         return (act_dist <= sight_dist);
     }
 
+    //Returns string; Generates a code fairly unique to this landmark
+    sCode() {
+        return __(this).close_desc + " " + __(this).coord.toString();
+    }
+
 }
 
 exports.Landmark = Landmark;

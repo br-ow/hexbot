@@ -433,31 +433,6 @@ describe('World', function() {
 });//end World
 
 describe('Session', function() {
-    describe('#getState()', function() {
-        it('Session starts in the FREE state', function() {
-            var session = new sess.Session(123);
-            assert.equal(session.getState(), sess.StateEnum.FREE);
-        });
-    });
-
-    describe('#setState()', function() {
-        it('Can set and get state', function() {
-            var session = new sess.Session(123);
-            assert.equal(session.getState(), sess.StateEnum.FREE);
-            session.setState(sess.StateEnum.FIGHT);
-            assert.equal(session.getState(), sess.StateEnum.FIGHT);
-        });
-    });
-
-    describe('#setState() 2', function() {
-        it('Cannot set to invalid state', function() {
-            var session = new sess.Session(123);
-            assert.equal(session.getState(), sess.StateEnum.FREE);
-            session.setState("eating");
-            assert.equal(session.getState(), sess.StateEnum.FREE);
-        });
-    });
-
     describe('#hasUser()', function() {
         it('Should recognize the user we put there.', function() {
             var session = new sess.Session(123);
@@ -563,6 +538,70 @@ describe('Session', function() {
             assert.equal(session.getMinute(), 7);
         });
     });
+
+    describe('#getState()', function() {
+        it('Session starts in the FREE state', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+        });
+    });
+
+    describe('#setState()', function() {
+        it('Can set and get state', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+            session.setState(sess.StateEnum.FIGHT);
+            assert.equal(session.getState(), sess.StateEnum.FIGHT);
+        });
+    });
+
+    describe('#setState() 2', function() {
+        it('Cannot set to invalid state', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+            session.setState("eating");
+            assert.equal(session.getState(), sess.StateEnum.FREE);
+        });
+    });
+
+    describe('#isIgnoring()', function() {
+        it('Should not recognize the landmark we didnt put there.', function() {
+            var session = new sess.Session(123);
+            assert.equal(session.isIgnoring("a big leafy tree"), false);
+        });
+    });
+
+    describe('#addIgnore()', function() {
+        it('Add ignored landmark to the session', function() {
+            var session = new sess.Session(123);
+            session.addIgnore("a big leafy tree");
+            assert.equal(session.isIgnoring("a big leafy tree"), true);
+        });
+    });
+
+    describe('#unIgnore()', function() {
+        it('Remove a user from the session', function() {
+            var session = new sess.Session(123);
+            session.addIgnore("a big leafy tree");
+            assert.equal(session.isIgnoring("a big leafy tree"), true);
+            session.unIgnore("a big leafy tree");
+            assert.equal(session.isIgnoring("a big leafy tree"), false);
+        });
+    });
+
+    describe('#unIgnore()', function() {
+        it('Remove a user from the session', function() {
+            var session = new sess.Session(123);
+            session.addIgnore("a big leafy tree");
+            session.addIgnore("a little scrawny tree");
+            assert.equal(session.isIgnoring("a big leafy tree"), true);
+            assert.equal(session.isIgnoring("a little scrawny tree"), true);
+            session.clearIgnores();
+            assert.equal(session.isIgnoring("a big leafy tree"), false);
+            assert.equal(session.isIgnoring("a little scrawny tree"), false);
+        });
+    });
+
 });//end Session
 
 describe('GameMaster', function() {
